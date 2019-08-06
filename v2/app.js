@@ -20,7 +20,7 @@ Campground.deleteOne({name: "Granite Hill"} , function(err){
 });
 
 app.get("/" , function(req , res){
-    res.render("landing");
+    res.render("landing"); 
 })
 
 app.get("/campgrounds" , function(req , res){ 
