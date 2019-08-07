@@ -9,7 +9,7 @@ var Comment = require("./models/comment");
 var User = require('./models/user');
 var methodOveride = require("method-override");
 
-mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useFindAndModify: false });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
@@ -101,7 +101,7 @@ app.get("/campgrounds/:id/edit", checkCampgroundOwnership, function (req, res) {
     })
 })
 
-app.put("/campgrounds/:id", checkCampgroundOwnership , function (req, res) {
+app.put("/campgrounds/:id", checkCampgroundOwnership, function (req, res) {
     //find and update 
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, function (err, updatedCampground) {
         if (err) {
@@ -112,7 +112,7 @@ app.put("/campgrounds/:id", checkCampgroundOwnership , function (req, res) {
     })
 })
 
-app.delete("/campgrounds/:id", checkCampgroundOwnership ,function (req, res) {
+app.delete("/campgrounds/:id", checkCampgroundOwnership, function (req, res) {
     Campground.findByIdAndRemove(req.params.id, function (err) {
         if (err) {
             res.redirect("/campgrounds");
@@ -151,6 +151,36 @@ app.post("/campgrounds/:id/comments", isLoggedIn, function (req, res) {
                     res.redirect("/campgrounds/" + campground._id);
                 }
             })
+        }
+    })
+})
+
+app.get("/campgrounds/:id/comments/:comment_id/edit", checkCommentOwnership, function (req, res) {
+    Comment.findById(req.params.comment_id, function (err, foundComment) {
+        if (err) {
+            res.redirect("back");
+        } else {
+            res.render("comments/edit", { campground_id: req.params.id, comment: foundComment });
+        }
+    })
+})
+
+app.put("/campgrounds/:id/comments/:comment_id", checkCommentOwnership, function (req, res) {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function (err, updatedComment) {
+        if (err) {
+            res.redirect("back");
+        } else {
+            res.redirect("/campgrounds/" + req.params.id);
+        }
+    })
+})
+
+app.delete("/campgrounds/:id/comments/:comment_id", checkCommentOwnership, function (req, res) {
+    Comment.findByIdAndRemove(req.params.comment_id, function (err) {
+        if (err) {
+            res.redirect("back");
+        } else {
+            res.redirect("/campgrounds/" + req.params.id);
         }
     })
 })
@@ -208,6 +238,24 @@ function checkCampgroundOwnership(req, res, next) {
                 }
             }
         })
+    }
+}
+
+function checkCommentOwnership(req, res, next) {
+    if (req.isAuthenticated()) {
+        Comment.findById(req.params.comment_id, function (err, foundComment) {
+            if (err) {
+                res.redirect("back");
+            } else {
+                if (foundComment.author.id.equals(req.user._id)) {
+                    next();
+                } else {
+                    res.redirect("back");
+                }
+            }
+        })
+    } else {
+        res.redirect("back");
     }
 }
 
