@@ -7,6 +7,9 @@
     <p>
         <strong><%= comment.author.username %></strong> - <%= comment.text %>
     </p>
+    <p>
+        <em>Submitted by <%= campground.author.username %></em>
+    </p>
 <% }) %>
 
 <% include ../partials/footer %>

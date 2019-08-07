@@ -49,14 +49,20 @@ app.get("/campgrounds", function (req, res) {
     })
 })
 
-app.post("/campgrounds", function (req, res) {
+app.post("/campgrounds", isLoggedIn,  function (req, res) {
     var name = req.body.name;
     var image = req.body.image;
     var description = req.body.description;
+    var author = {
+        id: req.user._id,
+        username: req.user.username,
+    }
+
     var newCampground = {
         name: name,
         image: image,
         description: description,
+        author: author,
     };
 
     //Create a new campground and save it to the DB
@@ -118,7 +124,7 @@ app.post("campgrounds/:id/comments", isLoggedIn , function (req, res) {
     })
 })
 
-app.get("/campgrounds/new", function (req, res) {
+app.get("/campgrounds/new", isLoggedIn , function (req, res) {
     res.render("campgrounds/new");
 })
 
