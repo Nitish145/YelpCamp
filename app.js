@@ -10,7 +10,7 @@ var User = require('./models/user');
 var methodOveride = require("method-override");
 var flash = require("connect-flash");
 
-mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect("mongodb+srv://Nitish:Aggarwals@123@cluster0-qlhyo.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useFindAndModify: false });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
