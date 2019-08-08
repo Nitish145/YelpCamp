@@ -5,6 +5,7 @@ body{
 #landing-header {
     z-index: 1;
     position: relative;
+    font-size: 2em;
     text-align: center;
     padding-top: 40vh;
 }
