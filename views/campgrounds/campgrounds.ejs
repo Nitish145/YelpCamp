@@ -11,10 +11,10 @@
         </div>
     </header>
 
-    <div style="padding: 0px 0px 20px 0px;" class="row text-center" style="display:flex; flex-wrap: wrap;">
+    <div class="row text-center" style="display:flex; flex-wrap: wrap;">
         <% campgrounds.forEach(function(campground){ %>
-            <div class="col-md-3 col-sm-6">
-                <div class="thumbnail">
+            <div class="col-md-3 col-sm-6 " style="padding: 10px 10px 20px 10px;">
+                <div class="img-thumbnail">
                     <img style="width: 100%; height: 180px;" src="<%= campground.image %>">
                 </div>
                 <div class="caption">
